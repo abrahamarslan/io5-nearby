@@ -34,4 +34,28 @@ export class GeocoderService {
               });
       });
   }
+
+    /**
+     *
+     * A reverse geo-code feature.
+     * Translate (lat,lng) into approximate address
+     *
+     * @public
+     * @method reverseGeocode
+     * @return {Promise}
+     *
+     */
+    reverseGeocode(lat: number, lng: number): Promise<any> {
+        return new Promise<any>((resolve,reject) => {
+            this._geocoder.reverseGeocode(lat, lng)
+                .then((result:NativeGeocoderResult) => {
+                    let str:string = `The reversed geo-code addrss is (${result.locality}, ${result.countryCode})`;
+                    resolve(str);
+                })
+                .catch((error:any) => {
+                    console.log(error);
+                    reject(error);
+                });
+        });
+    }
 }
