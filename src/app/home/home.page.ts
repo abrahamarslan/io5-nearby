@@ -20,13 +20,14 @@ export class HomePage {
 
   constructor(public navCtrl: NavController, public geocoder: GeocoderService, private _fb: FormBuilder, private _platform: Platform) {
       this.form = _fb.group({
-        'keyword': ['', Validators.required]
+          'keyword': ['', Validators.required]
       });
 
       this.geoForm = _fb.group({
-        'latitude': ['', Validators.required],
-        'longitude': ['', Validators.required],
+          'latitude': ['', Validators.required],
+          'longitude': ['', Validators.required],
       });
+  }
 
     /**
      * Display form options
@@ -34,12 +35,12 @@ export class HomePage {
       filterForm() {
         if(this.displayForwardForm) {
           this.filter = 'Search by keyword';
-          this.displayReverseForm = false;
-          this.displayForwardForm = true;
-        } else {
-          this.filter = 'Search by co-ordinates';
           this.displayReverseForm = true;
           this.displayForwardForm = false;
+        } else {
+          this.filter = 'Search by co-ordinates';
+          this.displayReverseForm = false;
+          this.displayForwardForm = true;
         }
     }
     /**
@@ -54,6 +55,10 @@ export class HomePage {
               .then((data: any) => {
                 this.geocoded = true;
                 this.results = data;
+              })
+              .catch((error: any) => {
+                  this.geocoded = false;
+                  this.results = error.message;
               });
       })
       .catch((error: any) => {
@@ -62,6 +67,31 @@ export class HomePage {
         this.results = error.message;
       });
     }
-  }
+
+
+    /**
+     * @public
+     * @return {none}
+     */
+    forwardGeocode(val) {
+        console.log(val);
+        this._platform.ready().then((data: any) => {
+            let keyword: string = this.form.controls["keyword"].value;
+            this.geocoder.forwardGeocode(keyword)
+                .then((data: any) => {
+                    this.geocoded = true;
+                    this.results = data;
+                })
+                .catch((error: any) => {
+                    this.geocoded = false;
+                    this.results = error.message;
+                });
+        })
+        .catch((error: any) => {
+            //Todo: Display and log error information
+            this.geocoded = false;
+            this.results = error.message;
+        });
+    }
 
 }
