@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import {NativeGeocoder, NativeGeocoderResult,  NativeGeocoderOptions} from "@ionic-native/native-geocoder/ngx";
 import {HttpClient, HttpHeaders, HttpErrorResponse} from "@angular/common/http";
+import {Geolocation, Geoposition} from "@ionic-native/geolocation/ngx";
 
 @Injectable()
 export class GeocoderService {
 
-  constructor(public http: HttpClient, private _geocoder: NativeGeocoder) {
+  constructor(public http: HttpClient, private _geocoder: NativeGeocoder, private _geolocation: Geolocation) {
     //Todo: Add more method magic
   }
 
@@ -50,6 +51,32 @@ export class GeocoderService {
                     let raddress: any = result[0];
                     let str:string = `The reversed geo-code addrss is (${JSON.stringify(raddress)})`;
                     resolve(str);
+                })
+                .catch((error:any) => {
+                    reject(error);
+                });
+        });
+    }
+
+
+    /**
+     *
+     * Geolocation feature
+     * Get the current device location
+     *
+     * @public
+     * @method getGeolocation
+     * @return {Promise}
+     *
+     */
+    getGeolocation():Promise<any> {
+        return new Promise<any>((resolve,reject) => {
+            this._geolocation.getCurrentPosition()
+                .then((data: Geoposition) => {
+                    let lat = data.coords.latitude;
+                    let lng = data.coords.longitude;
+                    let accuracy = data.coords.accuracy;
+                    resolve(data);
                 })
                 .catch((error:any) => {
                     reject(error);

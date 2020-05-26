@@ -17,6 +17,9 @@ export class HomePage {
   public filter: string = 'Search by co-ordinates';
   public displayForwardForm: boolean = true;
   public displayReverseForm: boolean = false;
+  public curLat:any;
+  public curLng: any;
+  public curAccuracy: any;
 
   constructor(public navCtrl: NavController, public geocoder: GeocoderService, private _fb: FormBuilder, private _platform: Platform) {
       this.form = _fb.group({
@@ -92,6 +95,32 @@ export class HomePage {
             this.geocoded = false;
             this.results = error.message;
         });
+    }
+
+    /**
+     * @public
+     * @return {none}
+     */
+    getGeolocation() {
+        this._platform.ready().then((data: any) => {
+            this.geocoder.getGeolocation()
+                .then((data: any) => {
+                    this.geocoded = true;
+                    this.curLat = data?.coords.latitude;
+                    this.curLng = data?.coords.longitude;
+                    this.curAccuracy = data?.coords.accuracy;
+                    this.results = `Latitude: ${this.curLat}  Longitude: ${this.curLng}  Accuracy: ${this.curAccuracy}`;
+                })
+                .catch((error: any) => {
+                    this.geocoded = false;
+                    this.results = error.message;
+                });
+        })
+            .catch((error: any) => {
+                //Todo: Display and log error information
+                this.geocoded = false;
+                this.results = error.message;
+            });
     }
 
 }

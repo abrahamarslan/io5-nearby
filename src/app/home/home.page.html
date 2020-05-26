@@ -14,8 +14,8 @@
   </ion-header>
 
   <div id="container">
-    <ion-button (click)="filterForm()" expand="block" fill="outline" class="ion-margin-bottom">[GeoCoder] Forward</ion-button>
-    <ion-button expand="block" fill="outline">[GeoCoder] Reverse</ion-button>
+    <ion-button (click)="filterForm()" expand="block" fill="outline" class="ion-margin-bottom">[GeoCoder] Toggle (Forward, Reverse)</ion-button>
+    <ion-button (click)="getGeolocation()" expand="block" fill="outline">[Geolocation] Locate</ion-button>
 
     <form [formGroup]="form" (ngSubmit)="forwardGeocode(form.value)" *ngIf="displayForwardForm">
       <ion-list>

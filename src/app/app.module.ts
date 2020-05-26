@@ -8,7 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 //Import external components
 import {NativeGeocoder} from "@ionic-native/native-geocoder/ngx";
-
+import {Geolocation} from "@ionic-native/geolocation/ngx";
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -25,6 +25,7 @@ import {ReactiveFormsModule, FormsModule} from "@angular/forms";
   providers: [
     StatusBar,
     SplashScreen,
+    Geolocation,
     NativeGeocoder,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     GeocoderService
